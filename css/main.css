@@ -1,0 +1,14 @@
+.content {
+  display: flex;
+}
+
+.shoppingForm {
+  width: 100%;
+}
+.formRow label {
+  display: inline-block;
+  width: 30%;
+}
+.formRow input {
+  width: 60%;
+}
