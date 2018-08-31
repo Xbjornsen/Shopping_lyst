@@ -1,8 +1,9 @@
-var conn = indexedDB.open('shopping_list', 1);
+var conn = indexedDB.open('shopping_listv1', 1);
 
-function createRow(db) {
+function createRow(data) {
   var row = document.createElement('tr');
-  row.classicList.add('itemRow');
+  row.classList.add('itemRow');
+  console.log(data);
   var nameCell = document.createElement('td');
   nameCell.innerHTML = data.item;
   row.appendChild(nameCell);
@@ -10,31 +11,44 @@ function createRow(db) {
 }
 
 function loadData(db) {
-
+  var shoppingTable = document.querySelector("#shoppingList tbody");
+  shoppingTable.innerHTML = '';
+  var store = db.transaction(['listItems']).objectStore('listItems')
+  var cursor = store.openCursor();
+  cursor.addEventListener('success', function(evt) {
+    var thisCursor = evt.target.result;
+    if (thisCursor) {
+      shoppingTable.appendChild(createRow(thisCursor.value));
+      thisCursor.continue();
+    } else {
+      console.log('No More Items');
+    }
+  });
 }
-function bindSaveButton(db) {
-  var shoppingItem = document.getElementById('ItemInput');
+
+function bindButtons(db) {
+  var shoppingItem = document.getElementById('itemInput');
   var saveButton = document.getElementById('add');
   saveButton.addEventListener('click', function(evt) {
     evt.preventDefault();
     var transaction = db.transaction(['listItems'],'readwrite');
     var objectStore = transaction.objectStore('listItems');
-    var request = objectStore.add({item: shoppingItem});
+    var request = objectStore.add({item: shoppingItem.value});
     request.addEventListener('success', function(evt) {
       console.log(
         'Successfully added data',
         evt.target.result
       );
+      loadData(db);
     });
-  } );
+  });
 }
-
-
 
 conn.addEventListener('success', function(evt) {
   var db = evt.target.result;
   console.log('connected event', evt);
-  bindSaveButton(db);
+  bindButtons(db);
+  loadData(db);
 });
 
 conn.addEventListener('error', function(evt) {
