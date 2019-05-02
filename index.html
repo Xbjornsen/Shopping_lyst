@@ -8,22 +8,23 @@
 <body>
     <header>Please input your shopping items</header>
     <div class="list">
-    <p>Once you are done entering the items press add to shopping list</p></div>
+		<p>Once you are done entering the items press add to shopping list</p>
+	</div>
     <div class="content">
         <form class="shoppingForm">
         <div class="formRow">
             <label for="ItemInput">Item name</label>
             <input type="text" name="item" id="itemInput"/>
         </div>
-          <button id="add" type="button">Add</button>
+			<button id="add" type="button">Add</button>
         </form>
         <table id="shoppingList">
-        <thread>
+        <thead>
             <tr>
                 <th>ID</th>
                 <th>Item</th>
             </tr>
-            </thread>
+            </thead>
             <tbody>
             </tbody>
         </table>
